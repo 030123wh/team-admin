@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        margin: 0 0;
+        padding: 0 0;
+    }
+    .top{
+        height: 80px;
+        background-image: url('./image/top.jpg');
+        background-size: 100% auto;
+        position: relative;
+    }
+    .logo{
+        height: 50px;
+        position: absolute;
+        left: 50px;
+        top: 15px;
+    }
+    .content{
+        
+        /* height: 500px; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+
+    }
+    .content-wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .left {
+        /* flex: 1; */
+    }
+    .main {
+        /* flex: 1; */
+        height: 220px;
+        width: 700px;
+        padding-left: 20px;
+        line-height: 35px;
+    }
+    .left-image{
+        height: 220px;
+        width: 400px;
+    }
+    .main-title{
+        font-size: 22px;
+    }
+    .main-value{
+        color: red;
+    }
+    .main-content{
+        line-height: 20px;
+        font-size: 12px;
+        color: #666;
+    }
+    .main-amount{
+        display: flex;
+    }
+    .main-amount-flex{
+        flex: 1;
+    }
+    #Search{
+        float: right;
+        padding-top: 20px;
+        padding-right: 50px;
+    }
+
+
+    .styled-table {  
+    width: 100%;  
+    border-collapse: collapse;  
+    margin: 25px 0;  
+    font-size: 18px;  
+    text-align: left;  
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);  
+}  
+
+
+.styled-table thead tr {  
+    background-color: #009879;  
+    color: #ffffff;  
+    text-align: left;  
+    font-weight: bold;  
+}  
+  
+.styled-table th, .styled-table td {  
+    padding: 12px 15px;  
+}  
+
+
+.styled-table tbody tr {  
+    border-bottom: 1px solid #dddddd;  
+}  
+  
+.styled-table tbody tr:nth-of-type(even) {  
+    background-color: #f3f3f3;  
+}  
+  
+.styled-table tbody tr:last-of-type {  
+    border-bottom: 2px solid #009879;  
+}  
+.add{  
+            background-color: '#007BFF';  
+            color : 'white'; 
+            border : 'none'; 
+            padding : '5px 10px'; 
+            cursor : 'pointer'; 
+}
+</style>
+
+
+
+<body>
+    <div>
+        <div class="top">
+            <img class="logo" src="./image/logo.png" alt="">
+            <div id="Search" >
+                search
+            </div>
+        </div>
+        <div>
+            <button style="background-color: #009879; color: white;border: none; 
+            padding: 5px 10px; cursor: pointer; margin-top: 20px;" id="add">AddData</button>
+        </div>
+        <div class="content" id="table-container">
+            
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    let url = 'http://127.0.0.1:5500/api'
+
+    const add = document.getElementById('add')
+    add.addEventListener('click', AddData)
+    function AddData() {
+       window.location.href = './form.html'
+
+    }
+
+    function delData() {
+
+    }
+
+    function getList() {
+        console.log('123');
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET',url + '/allData', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                console.log(data)
+                getTable(data.data)
+            } else {
+                console.error('请求失败');
+            }
+        };
+    }
+
+    function getTable(data) {
+        const table = document.createElement('table');
+        table.className ='styled-table';
+
+        table.border = '1';
+        const thead = document.createElement('thead');  
+        const headerRow = document.createElement('tr');  
+        const headers = ['FUNDRAISER_ID', 'CAPTION', 'ORGANIZER','TARGET_FUNDING','CURRENT_FUNDING','CITY',,'CATEGORY','ACTIONS'];  
+        headers.forEach(headerText => {  
+            const th = document.createElement('th');  
+            th.textContent = headerText;  
+            headerRow.appendChild(th);  
+        });  
+        thead.appendChild(headerRow);  
+        table.appendChild(thead);  
+
+        const tbody = document.createElement('tbody'); 
+        const rows = data
+        
+        rows.forEach(rowData => {
+            const row = document.createElement('tr');  
+            const cells = [rowData.FUNDRAISER_ID, rowData.CAPTION, rowData.ORGANIZER, rowData.TARGET_FUNDING, rowData.CURRENT_FUNDING, rowData.CITY, rowData.ACTIVE_CATEGORY_ID];
+
+            cells.forEach((cellData, index) => {
+                const td = document.createElement('td');
+                if (index === 6) {
+                    td.textContent = cellData === 0 ? 'created' :  cellData === 1 ?  'Published': 'Ended' ;
+                } else{
+                    td.textContent = cellData;
+                }
+               
+                row.appendChild(td);
+            });
+            const actionCell = document.createElement('td');  
+            const button = document.createElement('button');  
+            button.textContent = 'UPDATE';  
+            button.style.backgroundColor = '#007BFF';  
+            button.style.color = 'white'; 
+            button.style.border = 'none'; 
+            button.style.padding = '5px 10px'; 
+            button.style.cursor = 'pointer'; 
+
+            const button1 = document.createElement('button');  
+            button1.textContent = 'DELETE';  
+            button1.style.backgroundColor = 'red';  
+            button1.style.color = 'white'; 
+            button1.style.border = 'none'; 
+            button1.style.padding = '5px 10px'; 
+            button1.style.cursor = 'pointer'; 
+            button1.style.margin = '5px 10px'; 
+        
+
+            button.addEventListener('click', (e) => {
+                var row = e.target.parentNode.parentNode;  
+                var cells = row.getElementsByTagName('td');  
+            
+    
+                var rowData = [];  
+                for (var i = 0; i < cells.length - 1; i++) { 
+                    rowData.push(cells[i].textContent);  
+                }  
+
+                window.location.href = `./form.html?FUNDRAISER_ID=${rowData[0]}`
+
+                
+            });
+
+            button1.addEventListener('click', (e) => {
+                var row = e.target.parentNode.parentNode;  
+                var cells = row.getElementsByTagName('td');  
+            
+    
+                var rowData = [];  
+                for (var i = 0; i < cells.length - 1; i++) { 
+                    rowData.push(cells[i].textContent);  
+                }  
+  
+    
+
+                if (rowData[6] === 'created') {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('DELETE',url + `/deleteFundraiserData?FUNDRAISER_ID=${rowData[0]}&ACTIVE_CATEGORY_ID=0`, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send();
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            let data = JSON.parse(xhr.responseText);
+                            if (data.code === 200) {
+                                alert('Delete success!')
+                                const tbody = table.querySelector('tbody');  
+                                tbody.removeChild(row);
+                            } else {
+                                alert('Delete fail!')
+                            }
+                        } else {
+                            console.error('请求失败');
+                        }
+                    };
+                } else {
+                    alert('Only activities that have not started can be deleted!!')
+                }
+
+                
+                console.log('Button clicked!',e);
+            });
+
+            actionCell.appendChild(button);  
+            actionCell.appendChild(button1);  
+            row.appendChild(actionCell)
+
+
+            tbody.appendChild(row);
+        })
+        console.log(rows);
+        
+        table.appendChild(tbody);
+        const tableContainer = document.getElementById('table-container');  
+        tableContainer.appendChild(table);  
+
+    }
+
+
+
+    getList()
+
+
+
+
+</script>
+
+
+</html>
