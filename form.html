@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        margin: 0 0;
+        padding: 0 0;
+    }
+    .top{
+        height: 80px;
+        background-image: url('./image/top.jpg');
+        background-size: 100% auto;
+        position: relative;
+    }
+    .logo{
+        height: 50px;
+        position: absolute;
+        left: 50px;
+        top: 15px;
+    }
+    .content{
+        
+        /* height: 500px; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .content-wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .left {
+        /* flex: 1; */
+    }
+    .main {
+        /* flex: 1; */
+        height: 220px;
+        width: 700px;
+        padding-left: 20px;
+        line-height: 35px;
+    }
+    .left-image{
+        height: 220px;
+        width: 400px;
+    }
+    .main-title{
+        font-size: 22px;
+    }
+    .main-value{
+        color: red;
+    }
+    .main-content{
+        line-height: 20px;
+        font-size: 12px;
+        color: #666;
+    }
+    .main-amount{
+        display: flex;
+    }
+    .main-amount-flex{
+        flex: 1;
+    }
+    #Search{
+        float: right;
+        padding-top: 20px;
+        padding-right: 50px;
+    }
+
+    form {  
+            display: flex;  
+            flex-direction: column;  
+        }  
+  
+   
+        label {  
+            font-size: 16px;  
+            margin-bottom: 5px;  
+            color: #333;  
+        }  
+  
+      
+        input[type="text"],  
+        input[type="email"],  
+        input[type="number"],  
+
+        input[type="submit"] {  
+            width: 100%;  
+            padding: 10px;  
+            margin-bottom: 15px;  
+            border: 1px solid #ccc;  
+            border-radius: 5px;  
+            box-sizing: border-box; 
+        }  
+  
+        input[type="submit"] {  
+            background-color: #4CAF50; 
+            color: white;  
+            border: none;  
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }  
+  
+        input[type="submit"]:hover {  
+            background-color: #45a049; 
+        }  
+
+        form > * + * {  
+            margin-top: 10px;  
+        }  
+
+
+
+
+</style>
+
+
+
+<body>
+    <div>
+        <div class="top">
+            <img class="logo" src="./image/logo.png" alt="">
+        </div>
+        <div class="content">
+            <form id="myForm" onsubmit="handleSearch(this)">  
+                <label for="username">CAPTION:</label>  
+                <input type="text" id="username" name="CAPTION" required>  
+                  
+                <label for="email">ORGANIZER:</label>  
+                <input type="text" id="email" name="ORGANIZER" required>  
+                  
+                <label for="age">TARGET_FUNDING:</label>  
+                <input type="number" id="age" name="TARGET_FUNDING" min="0" required> 
+
+                <label for="email">CITY:</label>  
+                <input type="text" id="email" name="CITY" required>  
+
+    
+                <label for="email">VALUE:</label>  
+                <input type="text" id="email" name="VALUE" required>  
+
+                <div class="radio-group">   ACTIVE_CATEGORY:
+                    <label class="radio-label" for="genderFemale">  
+                        <input type="radio" name="ACTIVE_CATEGORY" value="0" required> created  
+                        <input type="radio"  name="ACTIVE_CATEGORY" value="1"> Published  
+                        <input type="radio" name="ACTIVE_CATEGORY" value="2"> Ended  
+                    </label>  
+                    <!-- <label class="radio-label" for="genderFemale">  
+                       
+                    </label>  
+                    <label class="radio-label" for="genderFemale">  
+                        
+                    </label>   -->
+                </div>
+
+
+                  
+                <input type="submit" value="SAVE">  
+            </form>  
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    let url = 'http://127.0.0.1:5500/api'
+
+    function getUrlParams(key) {
+        let reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        let r = window.location.search.substr(1)
+            .match(reg);
+        if (r != null)
+            return unescape(r[2]);
+        return null;
+    }
+    let id = getUrlParams('FUNDRAISER_ID');
+    if(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET',url + `/getDataInfo?userId=${id}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                console.log(data.data)
+                var form = document.getElementById('myForm');
+                var CAPTION = form.querySelector('input[name="CAPTION"]');
+                var ORGANIZER = form.querySelector('input[name="ORGANIZER"]');
+                var TARGET_FUNDING = form.querySelector('input[name="TARGET_FUNDING"]');
+                var CITY = form.querySelector('input[name="CITY"]');
+                var VALUE = form.querySelector('input[name="VALUE"]');
+                // var ACTIVE_CATEGORY = form.querySelector('input[name="ACTIVE_CATEGORY"]');
+                CAPTION.value = data.data[0].CAPTION;
+                ORGANIZER.value = data.data[0].ORGANIZER;
+                TARGET_FUNDING.value = data.data[0].TARGET_FUNDING;
+                CITY.value = data.data[0].CITY;
+                VALUE.value = data.data[0].VALUE;
+                setRadioButtonValue('ACTIVE_CATEGORY',  data.data[0].ACTIVE_CATEGORY_ID.toString());
+                // ACTIVE_CATEGORY.value = 
+
+            } else {
+                console.error('请求失败');
+            }
+        };
+    }
+    function setRadioButtonValue(name, value) {
+        document.querySelector('input[name="' + name + '"][value="' + value + '"]').checked = true;
+    }
+
+    function handleSearch(form) {
+        event.preventDefault();        
+       
+
+        let CAPTION = form.CAPTION.value;
+        let ORGANIZER = form.ORGANIZER.value;
+        let TARGET_FUNDING = Number(form.TARGET_FUNDING.value);
+        let CITY = form.CITY.value;
+        let VALUE = form.VALUE.value;
+        console.log(form.ACTIVE_CATEGORY);
+        
+        let ACTIVE_CATEGORY_ID = Number(form.ACTIVE_CATEGORY.value) ;
+
+
+        let data = {
+            CAPTION,
+            ORGANIZER,
+            TARGET_FUNDING,
+            CITY,
+            VALUE,
+            ACTIVE_CATEGORY_ID,
+            CURRENT_FUNDING: 0,
+        }
+
+        if(id) {
+            data.FUNDRAISER_ID = id
+            console.log(data);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT',url + '/updateFundraiserData', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(data));
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    // console.log(data)
+                    // getTable(data.data)
+                    if (data.code) {
+                        window.location.href = './index.html';
+                    } else{
+                        alert('NOT PARAMS')
+                    }
+                } else {
+                    console.error('请求失败');
+                }
+            };
+        } else{
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST',url + '/addFundraiserData', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(data));
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    // console.log(data)
+                    // getTable(data.data)
+                    if (data.code) {
+                        window.location.href = './index.html';
+                    } else{
+                        alert('NOT PARAMS')
+                    }
+                } else {
+                    console.error('请求失败');
+                }
+            };
+        }
+ 
+        console.log(data);
+    }
+</script>
+
+
+</html>
