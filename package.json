@@ -1,0 +1,26 @@
+{
+  "name": "team-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/030123wh/team-admin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/030123wh/team-admin/issues"
+  },
+  "homepage": "https://github.com/030123wh/team-admin#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "http-proxy-middleware": "^3.0.3",
+    "path": "^0.12.7"
+  }
+}
