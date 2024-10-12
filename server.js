@@ -1,13 +1,12 @@
 const express=require("express");
-const bodyParser=require("body-parser");
 const path=require("path");
 const app=express();
+
 var {createProxyMiddleware } = require("http-proxy-middleware");
 var proxyPath = "http://127.0.0.1:3000";
+
 var proxyOption ={target:proxyPath,changeOrigoin:true};
 
-app.use(bodyParser.urlencoded({extended:true}))
-app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 

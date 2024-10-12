@@ -177,7 +177,7 @@
         table.border = '1';
         const thead = document.createElement('thead');  
         const headerRow = document.createElement('tr');  
-        const headers = ['FUNDRAISER_ID', 'CAPTION', 'ORGANIZER','TARGET_FUNDING','CURRENT_FUNDING','CITY',,'CATEGORY','ACTIONS'];  
+        const headers = ['FUNDRAISER_ID', 'CAPTION', 'ORGANIZER','TARGET_FUNDING','CURRENT_FUNDING','CITY',,'CATEGORY','Active','ACTIONS'];  
         headers.forEach(headerText => {  
             const th = document.createElement('th');  
             th.textContent = headerText;  
@@ -191,13 +191,16 @@
         
         rows.forEach(rowData => {
             const row = document.createElement('tr');  
-            const cells = [rowData.FUNDRAISER_ID, rowData.CAPTION, rowData.ORGANIZER, rowData.TARGET_FUNDING, rowData.CURRENT_FUNDING, rowData.CITY, rowData.ACTIVE_CATEGORY_ID];
+            const cells = [rowData.FUNDRAISER_ID, rowData.CAPTION, rowData.ORGANIZER, rowData.TARGET_FUNDING, rowData.CURRENT_FUNDING, rowData.CITY, rowData.ACTIVE_CATEGORY_ID, rowData.Active];
 
             cells.forEach((cellData, index) => {
                 const td = document.createElement('td');
                 if (index === 6) {
-                    td.textContent = cellData === 0 ? 'created' :  cellData === 1 ?  'Published': 'Ended' ;
-                } else{
+                    td.textContent = cellData === 0 ? 'medical' :  cellData === 1 ?  'education': cellData === 2 ?  'social impact': 'crisis relief';
+                } else if (index === 7)  {
+                    td.textContent = cellData === 0 ? 'Active' : 'Pause'
+
+                } else{ 
                     td.textContent = cellData;
                 }
                

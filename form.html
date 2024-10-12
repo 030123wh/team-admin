@@ -144,20 +144,20 @@
                 <label for="email">VALUE:</label>  
                 <input type="text" id="email" name="VALUE" required>  
 
-                <div class="radio-group">   ACTIVE_CATEGORY:
+                <div class="radio-group">   CATEGORY:
                     <label class="radio-label" for="genderFemale">  
-                        <input type="radio" name="ACTIVE_CATEGORY" value="0" required> created  
-                        <input type="radio"  name="ACTIVE_CATEGORY" value="1"> Published  
-                        <input type="radio" name="ACTIVE_CATEGORY" value="2"> Ended  
+                        <input type="radio" name="ACTIVE_CATEGORY" value="0" required> medical  
+                        <input type="radio"  name="ACTIVE_CATEGORY" value="1"> education  
+                        <input type="radio" name="ACTIVE_CATEGORY" value="2"> social impact  
+                        <input type="radio" name="ACTIVE_CATEGORY" value="3"> crisis relief
                     </label>  
-                    <!-- <label class="radio-label" for="genderFemale">  
-                       
-                    </label>  
-                    <label class="radio-label" for="genderFemale">  
-                        
-                    </label>   -->
                 </div>
-
+                <div class="radio-group">   Active:
+                    <label class="radio-label" for="Active">  
+                        <input type="radio" name="Active" value="0" required> Active  
+                        <input type="radio"  name="Active" value="1"> Pause  
+                    </label>  
+                </div>
 
                   
                 <input type="submit" value="SAVE">  
@@ -193,6 +193,7 @@
                 var TARGET_FUNDING = form.querySelector('input[name="TARGET_FUNDING"]');
                 var CITY = form.querySelector('input[name="CITY"]');
                 var VALUE = form.querySelector('input[name="VALUE"]');
+                // var Active = form.querySelector('input[name="Active"]');
                 // var ACTIVE_CATEGORY = form.querySelector('input[name="ACTIVE_CATEGORY"]');
                 CAPTION.value = data.data[0].CAPTION;
                 ORGANIZER.value = data.data[0].ORGANIZER;
@@ -200,6 +201,7 @@
                 CITY.value = data.data[0].CITY;
                 VALUE.value = data.data[0].VALUE;
                 setRadioButtonValue('ACTIVE_CATEGORY',  data.data[0].ACTIVE_CATEGORY_ID.toString());
+                setRadioButtonValue('Active',  data.data[0].Active.toString());
                 // ACTIVE_CATEGORY.value = 
 
             } else {
@@ -225,7 +227,7 @@
 
 
         let ACTIVE_CATEGORY_ID = Number(form.ACTIVE_CATEGORY.value) ;
-
+        let Active = Number(form.Active.value) ;
 
         let data = {
             CAPTION,
@@ -235,6 +237,7 @@
             VALUE,
             ACTIVE_CATEGORY_ID,
             CURRENT_FUNDING: 0,
+            Active
         }
 
         if(id) {
@@ -267,7 +270,7 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     let data = JSON.parse(xhr.responseText);
-                    // console.log(data)
+                    console.log(data)
                     // getTable(data.data)
                     if (data.code) {
                         window.location.href = './index.html';
